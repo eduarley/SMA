@@ -1,0 +1,116 @@
+﻿@model SMA.Entities.TUsuario
+
+@{
+    ViewData["Title"] = "Detalles usuario";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Principal")">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Usuario")">Usuarios</a></li>
+                    <li class="breadcrumb-item active">Detalles</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class=" col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Nombre)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Apellidos)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Apellidos)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.CorreoElectronico)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.CorreoElectronico)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Cedula)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Cedula)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Estado)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Estado)
+                        {
+                            <p>Activo</p>
+                        }
+                        else
+                        {
+                            <p>Inactivo</p>
+                        }
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.IdDepartamentoNavigation)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.IdDepartamentoNavigation.Nombre)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.IdRolNavigation)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.IdRolNavigation.TipoRol)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.FechaCreacion)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.FechaCreacion)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    @if (Model.Foto != null)
+                    {
+                        <img class="profile-user-img img-fluid img-circle image"
+                             src="data:image/jpeg;charset=utf-8;base64,@Convert.ToBase64String(Model.Foto)"
+                             alt="user image"
+                             style="height: 200px; width:200px">
+                    }
+                    else
+                    {
+                        <center>
+                            <img class="profile-user-img img-fluid img-circle image"
+                                 src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png"
+                                 alt="user image"
+                                 style="height: 200px; width:200px">
+                            <p>Sin imagen de perfil</p>
+                        </center>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div>
+    <a asp-action="Index"><i class="fa-solid fa-circle-arrow-left"></i>   Volver atrás</a> |
+    <a asp-action="Edit" asp-route-id="@Model.IdUsuario"><i class="fa-solid fa-edit"></i> Editar</a>
+</div>

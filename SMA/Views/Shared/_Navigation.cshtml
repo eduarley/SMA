@@ -1,0 +1,132 @@
+﻿
+
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    SMA.Entities.TUsuario usuario = null;
+    var usuarioTemp = HttpContextAccessor.HttpContext.Session.GetString("usuario");
+    if (usuarioTemp != null)
+    {
+        usuario = (Newtonsoft.Json.JsonConvert.DeserializeObject<SMA.Entities.TUsuario>(usuarioTemp));
+    }
+}
+
+<link href="~/lib/Notificacion/ikr.notification.css" rel="stylesheet" />
+
+
+<style>
+    #example {
+        background-repeat: repeat-x;
+        /*
+        margin-left: 20px;
+        margin-top: 13px;
+        */
+    }
+
+        #example .but1 {
+            line-height: 0px;
+            margin-top: 0px;
+            margin-left: 0px;
+            margin-right: 0px;
+            display: inline-block;
+            position: relative;
+            margin-bottom: 30px
+        }
+</style>
+
+
+@*@if (User.Identity.IsAuthenticated)*@
+@if (usuario != null)
+{
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light shadow-sm bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Principal" asp-action="Index"><img style="width: 120px" src="~/img/banner.jpg" /></a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <!--Aqui muestra el menu segun el rol-->
+                @*
+                @if (String.Equals(@User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value, "admin", StringComparison.OrdinalIgnoreCase))
+            {
+                <partial name="_MenuAdministrativo" />
+            }
+            else
+            {
+                <partial name="_MenuRegular" />
+            }
+                *@
+
+                @if (String.Equals(usuario.IdRolNavigation.TipoRol, "admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    <partial name="_MenuAdministrativo" />
+                }
+                else
+                {
+                    <partial name="_MenuRegular" />
+                }
+
+                <ul class="navbar-nav ml-auto">
+                    <!--Aqui muestra las notificaciones -->
+                    <li id="noti_Container" style="margin-top: 15px"></li>
+
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @*@User.FindFirst("Correo").Value*@
+                            @usuario.CorreoElectronico
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg-right shadow-sm" style="width:350px" aria-labelledby="navbarDropdown">
+                            @if (usuario.Foto != null)
+                            {
+                                <center>
+                                    <div id="example">
+                                        <div class="but1">
+
+
+                                            <img class="profile-user-img img-fluid img-circle image"
+                                                 src="data:image/jpeg;charset=utf-8;base64,@Convert.ToBase64String(usuario.Foto)"
+                                                 alt="user image"
+                                                 style="height: 200px; width:200px" />
+
+                                        </div>
+                                    </div>
+                                </center>
+
+                            }
+                            else
+                            {
+                                <center>
+                                    <div>
+                                        <img src="~/img/3177440.png"
+                                             class=""
+                                             alt="User Image"
+                                             style="height:200px; width: auto">
+                                    </div>
+                                </center>
+
+
+                            }
+
+                            <center class="text-center">
+                                <p>@usuario.Nombre @usuario.Apellidos</p>
+                                <p class="text-muted">@usuario.IdRolNavigation.TipoRol</p>
+
+                            </center>
+                            <div class="dropdown-divider"></div>
+                            <div class="d-flex justify-content-between">
+                                <a class="btn" asp-controller="LogIn" asp-action="LogOut">Salir <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                                <a class="btn  btn-info mr-3" asp-route-id="@usuario.IdUsuario" asp-controller="Usuario" asp-action="UserProfile">Perfil</a>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+

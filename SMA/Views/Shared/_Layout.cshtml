@@ -1,0 +1,105 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SMA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <partial name="_Navigation" />
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            @RenderBody()
+        </main>
+    </div>
+
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+<script src="~/lib/Notificacion/ikr.notificationPlugin.js"></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+@if (TempData["success"] != null)
+{
+<script charset="utf-8">
+
+            swal({
+                title: "Éxito!",
+                text: '@Html.Raw(@TempData["success"])',
+                icon: "success",
+                html: true
+            });
+</script>
+}
+@if (TempData["warn"] != null)
+{
+<script>
+
+            swal({
+                title: "Hubo un problema!",
+                text: '@Html.Raw(@TempData["warn"])',
+                icon: "warning",
+                html: true
+            });
+</script>
+}
+@if (TempData["error"] != null)
+{
+<script>
+
+            swal({
+                title: "Error!",
+                text: '@Html.Raw(@TempData["error"])',
+                icon: "error",
+                html: true
+            });
+</script>
+}
+
+
+<script>
+    //Initialization
+    $("#noti_Container").designSetup();
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Notificacion/GetNotifications",
+            dataType: "json",
+            traditional: true,
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+
+                var notifications = data;
+
+                $("#noti_Container").cargarNotificaciones({
+                    NotificationList: notifications,
+                    ControllerName: "Notificacion",
+                    ActionName: "AllNotifications"
+                });
+            },
+            statusCode: {
+                404: function (content) { alert('cannot find resource'); },
+                500: function (content) { alert('internal server error'); }
+            },
+            error: function (xhr, status, error) {
+                // Muestra error
+                alert("Error: " + error + ", No Error: " + xhr.status);
+            }
+        });
+    });
+</script>

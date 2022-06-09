@@ -1,0 +1,271 @@
+﻿@model SMA.Entities.TUsuario
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+
+<link href="~/lib/passwordvalidatormeter/PasswordValidatorMeter.css" rel="stylesheet" />
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Principal")">Inicio</a></li>
+                    <li class="breadcrumb-item active">Perfil</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-3">
+
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    @if (Model.Foto != null)
+                    {
+                        <div id="example">
+                            <div class="but1">
+
+                                <!--Ekko Lightbox-->
+                                <a href="data:image/jpeg;charset=utf-8;base64,@Convert.ToBase64String(Model.Foto)" data-toggle="lightbox" data-title="Imagen de perfil">
+                                    <!--Card image-->
+                                    <img class="profile-user-img img-fluid img-circle image"
+                                         src="data:image/jpeg;charset=utf-8;base64,@Convert.ToBase64String(Model.Foto)"
+                                         alt="user image"
+                                         style="height: 200px; width:200px">
+                                </a>
+                                <br />
+                                <!--/.Card image-->
+                                <form asp-action="DeletePhoto" method="post">
+                                    <input name="id" value="@Model.IdUsuario" type="hidden" />
+                                    <button type="submit" class="badge-pill badge badge-secondary">Quitar imagen</button>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <img class="profile-user-img img-fluid img-circle"
+                             src="~/img/3177440.png"
+                             alt="User profile picture">
+                    }
+
+                </div>
+                <h3 class="profile-username text-center">@Model.Nombre</h3>
+                <center>
+                    <p class="text-muted text-center">@Model.IdRolNavigation.TipoRol</p>
+                </center>
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>@Html.DisplayNameFor(model => model.Cedula)</b> <a class="float-right">@Html.DisplayFor(model => model.Cedula)</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <b>@Html.DisplayNameFor(model => model.Estado)</b>
+                        @if (Model.Estado)
+                        {
+                            <a class="float-right">Activo</a>
+                        }
+                        else
+                        {
+                            <a class="float-right">Inactivo</a>
+                        }
+                    </li>
+                  
+                    <li class="list-group-item">
+                        <b>@Html.DisplayNameFor(model => model.FechaCreacion)</b> <a class="float-right">@Html.DisplayFor(model => model.FechaCreacion)</a>
+                    </li>
+                </ul>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card card-green card-outline h-100">
+            <div class="card-header p-2">
+                <h5>Editar</h5>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+
+                <div>
+                    <form asp-action="EditProfile" enctype="multipart/form-data" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class=" p-3 col-md-12">
+                            @Html.HiddenFor(model => model.IdUsuario)
+                            @Html.HiddenFor(model => model.FechaCreacion)
+                            @Html.HiddenFor(model => model.IdRol)
+                            @Html.HiddenFor(model => model.Estado)
+                            @Html.HiddenFor(model => model.Clave)
+                            @Html.HiddenFor(model => model.Foto)
+                            @Html.HiddenFor(model => model.IdDepartamento)
+                            @Html.HiddenFor(model => model.IdRol)
+
+
+                            <div class="col-md-12 form-horizontal">
+                                <div class="form-group row">
+                                    <label asp-for="Nombre" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="Nombre" class="form-control" />
+                                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label asp-for="Apellidos" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="Apellidos" class="form-control" />
+                                        <span asp-validation-for="Apellidos" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label asp-for="Cedula" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="Cedula" class="form-control" />
+                                        <span asp-validation-for="Cedula" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label asp-for="CorreoElectronico" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="CorreoElectronico" class="form-control" />
+                                        <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Foto, htmlAttributes: new { @class = "col-sm-2 control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        <input type="file" accept="image/png,image/jpeg" class="form-control" name="file" />
+                                    </div>
+                                </div>
+                                <p class="tooltip--triangle" data-tooltip="Editar la contraseña con la que inicias sesión">
+                                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal"><i class="fas fa-lock"></i> Cambiar Clave</button>
+                                </p>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-end">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div><!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+
+
+
+<!--MODAL CAMBIO CLAVE-->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="EditPassword" method="post">
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Cambio de contraseña</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 row">
+                        <div class="col-md-6 mt-5">
+
+                            <input type="hidden" name="idUsuario" value="@Model.IdUsuario" />
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <input class="form-control"
+                                       id="password"
+                                       name="password"
+                                       required="required"
+                                       autocomplete="new-password"
+                                       type="password" />
+                                <small><i id="eyePass" class="far fa-eye input-eye-icon"></i></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirmar contraseña</label>
+                                <input class="form-control"
+                                       id="confirmPassword"
+                                       name="confirmPassword"
+                                       required="required"
+                                       type="password" />
+                                <small><i id="eyeConfirm" class="far fa-eye input-eye-icon"></i></small>
+                                <p id="errorConfirm" class="text-danger"></p>
+                            </div>
+
+                            <div id="meter-strength">
+                                <meter value="0" min="0" max="100" id="password-meter"></meter>
+                                <p id="password-pecentage"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="message">
+                                <h4>Debe contener:</h4>
+                                <ul class="list-unstyled">
+                                    <li><p id="letter" class="invalid">Una <b>letra minúscula</b></p></li>
+                                    <li><p id="capital" class="invalid">Una <b>letra maýuscula</b></p></li>
+                                    <li><p id="number" class="invalid">Un <b>número</b></p></li>
+                                    <li><p id="character" class="invalid">Un <b>caracter especial</b></p></li>
+                                    <li><p id="min-length" class="invalid length">Mínimo <b>8 caracteres</b></p></li>
+                                    <li><p id="max-length" class="invalid length">Máximo <b>25 caracteres</b></p></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer justify-content-end">
+
+                    <button class="btn btn-danger btn-sm " data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span> Cancelar
+                    </button>
+                    <button class="btn btn-success btn-sm" type="submit" style="margin-right:5px;" id="btnCambiarClave">
+                        <span class="glyphicon glyphicon-pencil"></span> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/passwordvalidatormeter/PasswordValidatorMeter.js"></script>
+
+}

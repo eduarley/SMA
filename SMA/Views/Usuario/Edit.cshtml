@@ -1,0 +1,116 @@
+﻿@model SMA.Entities.TUsuario
+
+@{
+    ViewData["Title"] = "Editar usuario";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Principal")">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Usuario")">Usuarios</a></li>
+                    <li class="breadcrumb-item active">Editar</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="Edit">
+                    <div class="row">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Clave" />
+                        <input type="hidden" asp-for="IdUsuario" />
+                        <input type="hidden" asp-for="FechaCreacion" />
+                        <input type="hidden" asp-for="Foto" />
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Nombre" class="control-label"></label>
+                                <input asp-for="Nombre" class="form-control" />
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Apellidos" class="control-label"></label>
+                                <input asp-for="Apellidos" class="form-control" />
+                                <span asp-validation-for="Apellidos" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Cedula" class="control-label"></label>
+                                <input asp-for="Cedula" class="form-control" />
+                                <span asp-validation-for="Cedula" class="text-danger"></span>
+                                @if (TempData["errorCedula"] != null)
+                                {
+                                    <p class="text-danger">@TempData["errorCedula"]</p>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CorreoElectronico" class="control-label"></label>
+                                <input asp-for="CorreoElectronico" class="form-control" />
+                                <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                                @if (TempData["errorCorreo"] != null)
+                                {
+                                    <p class="text-danger">@TempData["errorCorreo"]</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IdDepartamento" class="control-label"></label>
+                                <select asp-for="IdDepartamento" class="form-control" asp-items="ViewBag.IdDepartamento"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IdRol" class="control-label"></label>
+                                <select asp-for="IdRol" class="form-control" asp-items="ViewBag.IdRol"></select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">
+                            @Html.DisplayNameFor(model => model.Estado)
+                            <select asp-for="Estado" name="Estado" class="form-control">
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <input type="submit" value="Guardar" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index"><i class="fa-solid fa-circle-arrow-left"></i>   Volver atrás</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

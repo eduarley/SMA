@@ -1,0 +1,179 @@
+﻿@model IEnumerable<SMA.Entities.TNotificacionGeneral>
+
+@{
+    ViewData["Title"] = "Todas las notificaciones";
+}
+
+<link href="~/lib/datatable/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<link href="~/lib/datatable/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" />
+<link href="~/lib/datatable/datatables-buttons/css/buttons.bootstrap4.css" rel="stylesheet" />
+
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Usuario: </strong> @TempData["success"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["warn"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Usuario: </strong> @TempData["warn"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Usuario: </strong> @TempData["error"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<!--
+    <div class="row">
+    <div class="col-md-12 text-left">
+        <a class="btn btn-danger" onclick="abrirPrompt()">Eliminar todo</a>
+    </div>
+</div>
+-->
+<div class="card">
+    <div class="card-body">
+        <table class="table" id="example1">
+            <thead>
+                <tr>
+                    <th>
+                        Responsable
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Titulo)
+
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fecha)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.IdEmisorNavigation.Foto != null)
+                            {
+                                <img class="profile-user-img img-fluid img-circle image"
+                                     src="data:image/jpeg;charset=utf-8;base64,@Convert.ToBase64String(item.IdEmisorNavigation.Foto)"
+                                     alt="user image"
+                                     style="height: 50px; width:50px; border-radius: 100px">
+                            }
+                            else
+                            {
+                                <img class="profile-user-img img-fluid img-circle image"
+                                     src="~/img/3177440.png"
+                                     alt="user image"
+                                     style="height: 50px; width:50px; border-radius: 100px">
+                            }
+
+                            <small class="d-block">@item.IdEmisorNavigation.Nombre @item.IdEmisorNavigation.Apellidos</small>
+                        </td>
+                        <td>
+                            @if (item.Visto)
+                            {
+                                <a class="text-black-50" asp-action="Details" asp-route-id="@item.IdNotificacion">@item.Titulo <i class="fa-solid fa-up-right-from-square"></i></a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-id="@item.IdNotificacion">@item.Titulo <i class="fa-solid fa-up-right-from-square"></i></a>
+                            }
+
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fecha)
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.IdNotificacion"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script src="~/lib/datatable/datatables/jquery.dataTables.js"></script>
+    <script src="~/lib/datatable/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="~/lib/datatable/datatables-responsive/js/dataTables.responsive.js"></script>
+    <script src="~/lib/datatable/datatables-responsive/js/responsive.bootstrap4.js"></script>
+    <script src="~/lib/datatable/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="~/lib/datatable/datatables-buttons/js/buttons.bootstrap4.js"></script>
+    <script src="~/lib/datatable/jszip/jszip.js"></script>
+    <script src="~/lib/datatable/pdfmake/pdfmake.js"></script>
+    <script src="~/lib/datatable/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatable/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="~/lib/datatable/datatables-buttons/js/buttons.print.js"></script>
+    <script src="~/lib/datatable/datatables-buttons/js/buttons.colVis.js"></script>
+
+
+
+    <script>
+        function abrirPrompt(id) {
+            var respuesta = confirm("Deseas borrar todas las notificaciones? No podrás recuperarlas");
+            if (respuesta) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Notificacion/DeleteAll',
+                    success: function () {
+
+                        location.reload();
+                    },
+                    error: function () {
+                        location.reload();
+                    }
+                })
+            }
+        }
+    </script>
+
+
+
+
+
+    <script>
+        function enviarID(id) {
+            debugger;
+            $('#IdUsuario').val(id);
+        }
+    </script>
+
+
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                },
+
+
+
+
+                "responsive": true, "lengthChange": false, "autoWidth": false, pageLength: 5,
+
+
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        });
+    </script>
+}

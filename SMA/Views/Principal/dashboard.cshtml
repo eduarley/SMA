@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewData["Title"] = "Principal";
+
+}
+
+<link href="~/css/dashboard.css" rel="stylesheet" />
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Estados</h3>
+
+                            </div>
+                        </div>
+                        <div class="card-body justify-content-md-center">
+
+                          
+                                <div id="estado-chart" style="height:300px; width: 100%;"></div>
+                            
+
+                            <!--
+                                <div class="d-flex flex-row justify-content-end">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">Registros totales:</span>
+                                </p>
+                            </div>
+                            -->
+
+                        </div>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Prioridad de revisiones</h3>
+
+                            </div>
+                        </div>
+                        <div class="card-body justify-content-md-center">
+                            
+                                <div id="prioridades-chart" style="height:300px; width: 100%;"></div>
+                            
+
+                        </div>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+</div>
+<!-- /.content-wrapper -->
+@section Scripts
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(DrawonLoad);
+        function DrawonLoad() {
+            $(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: 'Principal/GetPrioridadesChartJSON',
+                    success: function (chartsdata) {
+                        var Data = chartsdata.jsonList;
+                        var data = new google.visualization.DataTable();
+
+                        data.addColumn('string', 'prioridad');
+                        data.addColumn('number', 'total');
+                        
+                        
+                        for (var i = 0; i < Data.length; i++) {
+                            data.addRow([Data[i].prioridad, Data[i].total]);
+                        }
+
+
+                        var chartEstado = new google.visualization.BarChart(document.getElementById('prioridades-chart'));
+                        chartEstado.draw(data, {
+                            title: "",
+                            position: "top",
+                            fontSize: "14px",
+                            legend: 'none',
+                            pieSliceText: 'label',
+                            //colors: [ 'green', 'black'],
+                        });
+
+
+
+                    },
+                    error: function () {
+                        alert("Error al cargar el gráfico.");
+                    }
+
+                });
+            });
+        }
+    </script>
+
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(DrawonLoad);
+        function DrawonLoad() {
+            $(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: 'Principal/GetEstadosChartJSON',
+                    success: function (chartsdata) {
+                        var Data = chartsdata.jsonList;
+                        var data = new google.visualization.DataTable();
+
+                        data.addColumn('string', 'estado');
+                        data.addColumn('number', 'total');
+
+                        for (var i = 0; i < Data.length; i++) {
+                            data.addRow([Data[i].estado, Data[i].total]);
+                        }
+
+                        var chartEstado = new google.visualization.PieChart(document.getElementById('estado-chart'));
+                        chartEstado.draw(data, {
+                            title: "",
+                            position: "top",
+                            fontsize: "14px",
+                            //legend: 'none',
+                            pieSliceText: 'label',
+                            legend: { position: 'top', alignment: 'center' },
+
+                        });
+                    },
+                    error: function () {
+                        alert("Error al cargar el gráfico.");
+                    }
+
+                });
+            });
+        }
+    </script>
+}
